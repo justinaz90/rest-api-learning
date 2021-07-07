@@ -37,8 +37,12 @@ router.route('/concerts/:id').put((req, res) => {
 
 router.route('/concerts/:id').delete((req, res) => {
   const itemIndex = db.concerts.findIndex(({id}) => id == req.params.id);
-  db.concerts.splice(itemIndex, 1);
-  res.json({ message: 'OK' });
+  if(itemIndex >= 0 ) {
+    db.concerts.splice(itemIndex, 1);
+    res.json({ message: 'OK' });
+  } else {
+    res.json({ message: 'ID not found' });
+  }
 });
 
 module.exports = router;

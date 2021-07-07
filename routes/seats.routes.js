@@ -12,14 +12,19 @@ router.route('/seats/:id').get((req, res) => {
 });
 
 router.route('/seats').post((req, res) => {
-  db.seats.push({ 
+  const booking = {
     id: uuidv4(), 
     day: req.body.day, 
     seat: req.body.seat,
     client: req.body.client,
     email: req.body.email,
-  });
-  res.json({ message: 'OK' });
+  }
+  if(db.seats.some(chosenSeat => (chosenSeat.day == req.body.day && chosenSeat.seat == req.body.seat))) {
+    return res.status(404).json({ message: 'This slot is already taken' });
+  } else {
+    db.seats.push(booking);
+    return res.json(db.seats);
+  }
 });
 
 router.route('/seats/:id').put((req, res) => {
@@ -35,8 +40,12 @@ router.route('/seats/:id').put((req, res) => {
 
 router.route('/seats/:id').delete((req, res) => {
   const itemIndex = db.seats.findIndex(({id}) => id == req.params.id);
-  db.seats.splice(itemIndex, 1);
-  res.json({ message: 'OK' });
+  if(itemIndex >= 0 ) {
+    db.seats.splice(itemIndex, 1);
+    res.json({ message: 'OK' });
+  } else {
+    res.json({ message: 'ID not found' });
+  }
 });
 
 module.exports = router;

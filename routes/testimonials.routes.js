@@ -35,8 +35,12 @@ router.route('/testimonials/:id').put((req, res) => {
 
 router.route('/testimonials/:id').delete((req, res) => {
   const itemIndex = db.testimonials.findIndex(({id}) => id == req.params.id);
-  db.testimonials.splice(itemIndex, 1);
-  res.json({ message: 'OK' });
+  if(itemIndex >= 0 ) {
+    db.testimonials.splice(itemIndex, 1);
+    res.json({ message: 'OK' });
+  } else {
+    res.json({ message: 'ID not found' });
+  }
 });
 
 module.exports = router;
