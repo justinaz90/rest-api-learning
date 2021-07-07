@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "v14.17.0"
+  },
   "scripts": {
     "start": "npx nodemon server.js",
     "build": "cd client && yarn install && yarn build"
